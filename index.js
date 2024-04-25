@@ -1,21 +1,18 @@
-require('dotenv').config();
-const express = require('express');
-const connectDB = require('./config/config');
-const productRoutes = require('./routes/products');
+const express = require('express')
+const dbConnection = require('./config/config')
+const app = express()
+require('dotenv').config()
 
-const app = express();
-app.use(express.json()); // Middleware to parse JSON
+const PORT = process.env.PORT || 5481
+const routes = require('./routes/tasks.js ');
 
-connectDB(); // Connect to MongoDB
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
-app.use('/api/products', productRoutes); // Product Routes
+app.use('/', routes);
 
-app.get('/', (req, res) => {
-    res.send('Welcome to the API! Visit <a href="http://localhost:' + process.env.PORT + '/api/products">http://localhost:' + process.env.PORT + '/api/products</a> to see the products.');
-});
+dbConnection()
 
-const PORT = process.env.PORT || 3334;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Click to visit: http://localhost:${PORT}`);
-});
+  console.log(`Express está escuchando en el puerto http://localhost:${PORT}`)
+})
